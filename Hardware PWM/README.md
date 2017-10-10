@@ -1,15 +1,9 @@
 # Hardware PWM
-Now that you have done the software version of PWM, now it is time to start leveraging the other features of these Timer Modules.
+Note:  The following explantion will include the HardwarePWM functionality for all processors since the logic does not vary between the MSP430s.
 
-## Task
-You need to replicate the same behavior as in the software PWM, only using the Timer Modules ability to directly output to a GPIO Pin instead of managing them in software. 
-
-### Hints 
-Read up on the P1SEL registers as well as look at the Timer modules ability to multiplex.
-
-## Extra Work
-### Using ACLK
-Some of these microprocessors have a built in ACLK which is extremely slow compared to your up to 25MHz available on some of them. What is the overall impact on the system when using this clock? Can you actually use your PWM code with a clock that slow?
-
-### Ultra Low Power
-Using a combination of ACLK, Low Power Modes, and any other means you may deem necessary, optimize this PWM code to run at 50% duty cycle with a LED on the MSP430FR5994. In particular, time how long your code can run on the fully charged super capacitor. You do not need to worry about the button control in this case, and you will probably want to disable all the GPIO that you are not using (nudge, nudge, hint, hint).
+## Explanation
+Although the HardwarePWM required the use of one timer and two CCRx, just like the SoftwarePWM, it did not require timer interrupts. Instead, the Timer was output to one of the available pins
+, in this ase being the LED. This was done by implementing the the PxSELx register. Using this register the timer's clock signal could be sent to the LED. A button inteerupt was added
+to vary the duty cycle of the LED. Like the SoftwarePWM, everytime a button was pressed the duty cycle increased by 10% until it reached 100%. Once it reached 100% it the duty cycle reset back 
+to 0%. The most important aspect of this section was determining exactly what SEL register had to be used for each register. For example, on some boards the timers could not be output to the
+one of the LEDs so the datasheet for each Development board had to b checked to see what values could be output to each pin.

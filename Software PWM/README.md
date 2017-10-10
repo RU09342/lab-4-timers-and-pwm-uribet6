@@ -1,28 +1,9 @@
 # Software PWM
-Most microprocessors will have a Timer module, but depending on the device, some may not come with pre-built PWM modules. Instead, you may have to utilize software techniques to synthesize PWM on your own.
-
-## Task
-You need to generate a 1kHz PWM signal with a duty cycle between 0% and 100%. Upon the processor starting up, you should PWM one of the on-board LEDs at a 50% duty cycle. Upon pressing one of the on-board buttons, the duty cycle of the LED should increase by 10%. Once you have reached 100%, your duty cycle should go back to 0% on the next button press. You also need to implement the other LED to light up when the Duty Cycle button is depressed and turns back off when it is let go. This is to help you figure out if the button has triggered multiple interrupts.
-
-### Hints
-You really, really, really, really need to hook up the output of your LED pin to an oscilloscope to make sure that the duty cycle is accurate. Also, since you are going to be doing a lot of initialization, it would be helpful for all persons involved if you created your main function like:
-'''c
-int main(void)
-{
-	WDTCTL = WDTPW | WDTHOLD;	// stop watchdog timer
-	LEDSetup(); // Initialize our LEDS
-	ButtonSetup();  // Initialize our button
-	TimerA0Setup(); // Initialize Timer0
-	TimerA1Setup(); // Initialize Timer1
-	__bis_SR_register(LPM0_bits + GIE);       // Enter LPM0 w/ interrupt
-}
-'''
-This way, each of the steps in initialization can be isolated for easier understanding and debugging.
-
-
-## Extra Work
-### Linear Brightness
-Much like every other things with humans, not everything we interact with we perceive as linear. For senses such as sight or hearing, certain features such as volume or brightness have a logarithmic relationship with our senses. Instead of just incrementing by 10%, try making the brightness appear to change linearly. 
-
-### Power Comparison
-Since you are effectively turning the LED off for some period of time, it should follow that the amount of power you are using over time should be less. Using Energy Trace, compare the power consumption of the different duty cycles. What happens if you use the pre-divider in the timer module for the PWM (does it consume less power)?
+Note:  The following explantion will include the SoftwarePWM functionality for all processors since the logic does not vary between the MSP430s.
+## Explanation
+The SoftwarePWM was implemented by using one timer that triggered two timer interrupts. This was done by declaring two CCRX registers (CCR0 and CCR1). CCR0 and CCr1 were both set to 1000 and 500 respectively
+to begin at a 50% duty cycle. CCR0 determined the period of the cycle while CCR1 was used to determine how long the LED would be on compared to how long it would be off. The duty cycle 
+was changed using the button. Everytime the button was pressed the duty cycle increased by 10%. Once the duty cycle reached 100% it was reset to 0%. This was done within the PortX interrupt 
+by simply using a conditional statement to see if CCR1 equaled 1000 (Period of cycle). If CCR1 did equal 1000, meaning that there was a 100% duty cycle then CCR1 was reset to 0. If CCR1 was below
+1000 it incremented by 100. As for the two timer interrupts, the one triggered by CCR0 turned the LED on while the one triggered by CCR1 turned it off. Since CCR1 increased every time the
+button was pressed this caused the duty cycle to effectively change.
