@@ -1,6 +1,8 @@
 # Software PWM
 Note:  The following explanation will include the SoftwarePWM functionality for all processors since the logic does not vary between the MSP430s.
+
 ![alt text](https://github.com/RU09342/lab-4-timers-and-pwm-uribet6/blob/master/Hardware%20PWM/PWM.gif)
+
 ## Explanation
 The SoftwarePWM was implemented by using one timer that triggered two timer interrupts. This was done by declaring two CCRX registers (CCR0 and CCR1). CCR0 and CCR1 were both set to 1000 and 500 respectively
 to begin at a 50% duty cycle. CCR0 determined the period of the cycle while CCR1 was used to determine how long the LED would be on compared to how long it would be off. The duty cycle 

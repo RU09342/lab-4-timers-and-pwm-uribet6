@@ -1,6 +1,8 @@
 # Hardware PWM
 Note:  The following explanation will include the HardwarePWM functionality for all processors since the logic does not vary between the MSP430s.
+
 ![alt text](https://github.com/RU09342/lab-4-timers-and-pwm-uribet6/blob/master/Hardware%20PWM/PWM.gif)
+
 ## Explanation
 Although the HardwarePWM required the use of one timer and two CCRx, just like the SoftwarePWM, it did not require timer interrupts. Instead, the Timer was output to one of the available pins
 , in this case being the LED. This was done by implementing the PxSELx register. Using this register the timer's clock signal could be sent to the LED. A button interrupt was added
