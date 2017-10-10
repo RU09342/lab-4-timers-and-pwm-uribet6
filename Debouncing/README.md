@@ -10,7 +10,7 @@ Once this was turned off the PortX interrupt would no longer trigger until the P
 every time a button was pressed a new delay could start. It is also important to note that within the PortX interrupt the PXIES register was also flipped to account for button bouncing 
 when the button is pressed and depressed.
 
-##Extra Work
+## Extra Work
 Using the MSP430FR5994 an extra button was debounced. On this processor the two buttons are on the same port so the Port5 interrupt had to handle both of these flags. This was done by
 using the P5IFG register to determine which button was actually pressed. Conditional statements were used to determine if P5IFG raised a flag because of P5.6 or P5.5. Once this logic had been handled
 the functoinality basically mirrored the code that was written for just one button. The main difference was that another timer (TimerB) was added for P5.5. The reason for this was because
